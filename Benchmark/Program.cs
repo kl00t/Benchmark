@@ -1,40 +1,21 @@
-﻿using BenchmarkDotNet.Attributes;
-using BenchmarkDotNet.Running;
-using System.Text;
+﻿using BenchmarkDotNet.Running;
 
-namespace Benchmark
+namespace Benchmark;
+
+internal class Program
 {
-    internal class Program
+    static void Main(string[] args)
     {
-        static void Main(string[] args)
-        {
-            var summary = BenchmarkRunner.Run<MemoryBenchmarkerDemo>();
-        }
-    }
+        //var summary = BenchmarkRunner.Run<MemoryBenchmarkerDemo>();
+        //var summary = BenchmarkRunner.Run<MapperBenchmark>();
 
-    [MemoryDiagnoser]
-    public class MemoryBenchmarkerDemo
-    {
-        int NumberOfItems = 100000;
-        [Benchmark]
-        public string ConcatStringsUsingStringBuilder()
-        {
-            var sb = new StringBuilder();
-            for (int i = 0; i < NumberOfItems; i++)
-            {
-                sb.Append("Hello World!" + i);
-            }
-            return sb.ToString();
-        }
-        [Benchmark]
-        public string ConcatStringsUsingGenericList()
-        {
-            var list = new List<string>(NumberOfItems);
-            for (int i = 0; i < NumberOfItems; i++)
-            {
-                list.Add("Hello World!" + i);
-            }
-            return list.ToString();
-        }
+        // OR
+
+        var switcher = new BenchmarkSwitcher(new[] {
+            typeof(MemoryBenchmarkerDemo),
+            typeof(MyBenchmarkExample)
+        });
+
+        switcher.Run(args);
     }
 }
